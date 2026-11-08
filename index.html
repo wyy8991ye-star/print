@@ -38,7 +38,8 @@
     go.style.display = 'none';
     return;
   }
-  var url = 'starpassprnt://v1/print/nopreview?size=3&cut=partial&popup=no&html=' + encodeURIComponent(html);
+  var size = /^[234]$/.test(params.s || '') ? params.s : '3';
+  var url = 'starpassprnt://v1/print/nopreview?size=' + size + '&cut=partial&popup=no&html=' + encodeURIComponent(html);
   go.href = url;
   // 切到 PassPRNT 後再回來時，自動關掉這個分頁
   var left = false;
