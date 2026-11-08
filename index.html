@@ -40,6 +40,12 @@
   }
   var url = 'starpassprnt://v1/print/nopreview?size=3&cut=partial&popup=no&html=' + encodeURIComponent(html);
   go.href = url;
+  // 切到 PassPRNT 後再回來時，自動關掉這個分頁
+  var left = false;
+  document.addEventListener('visibilitychange', function(){
+    if(document.hidden){ left = true; }
+    else if(left){ window.close(); }
+  });
   location.href = url;
 })();
 </script>
