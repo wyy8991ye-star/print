@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>收據列印</title>
+<style>
+  body{margin:0;min-height:100vh;display:grid;place-items:center;background:#f3f6fa;color:#1b2533;
+    font:16px -apple-system,"PingFang TC","Noto Sans TC",sans-serif;padding:24px;box-sizing:border-box}
+  .box{background:#fff;border:1px solid #dbe3ed;border-radius:14px;padding:28px;max-width:420px;width:100%;text-align:center;display:grid;gap:14px}
+  h1{font-size:20px;margin:0}
+  p{margin:0;color:#647387;line-height:1.7;font-size:14px}
+  a.btn{display:block;background:#2563eb;color:#fff;text-decoration:none;border-radius:10px;padding:16px;font-size:18px;font-weight:700}
+  .err{color:#dc2626}
+</style>
+</head>
+<body>
+<div class="box">
+  <h1 id="t">正在傳送到出單機…</h1>
+  <p id="m">如果 iPad 問「要在 PassPRNT 中打開嗎？」，請按「打開」。</p>
+  <a class="btn" id="go" href="#">再印一次</a>
+  <p>印完後點左上角「◀」回到 POS，這個分頁可以直接關掉。</p>
+</div>
+<script>
+(function(){
+  // 收據內容放在網址 # 後面，不會送到任何伺服器
+  var raw = location.hash.slice(1), params = {};
+  raw.split('&').forEach(function(kv){
+    var i = kv.indexOf('='); if(i > 0) params[kv.slice(0,i)] = decodeURIComponent(kv.slice(i+1));
+  });
+  var html = params.h || '';
+  var go = document.getElementById('go');
+  if(!html){
+    document.getElementById('t').textContent = '沒有收到收據內容';
+    document.getElementById('t').className = 'err';
+    document.getElementById('m').textContent = '請回到 POS，重新按「列印收據」。';
+    go.style.display = 'none';
+    return;
+  }
+  var url = 'starpassprnt://v1/print/nopreview?size=3&cut=partial&popup=no&html=' + encodeURIComponent(html);
+  go.href = url;
+  location.href = url;
+})();
+</script>
+</body>
+</html>
